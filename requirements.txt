@@ -1,4 +1,6 @@
 asttokens==3.0.1
+boto3==1.43.29
+botocore==1.43.29
 certifi==2026.5.20
 charset-normalizer==3.4.7
 colorama==0.4.6
@@ -11,6 +13,7 @@ ipykernel==7.2.0
 ipython==9.12.0
 ipython_pygments_lexers==1.1.1
 jedi==0.19.2
+jmespath==1.1.0
 joblib==1.5.3
 jupyter_client==8.8.0
 jupyter_core==5.9.1
@@ -29,6 +32,7 @@ python-dateutil==2.9.0.post0
 python-dotenv==1.2.2
 pyzmq==27.1.0
 requests==2.34.2
+s3transfer==0.18.0
 scikit-learn==1.8.0
 scipy==1.17.1
 six==1.17.0
