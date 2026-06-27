@@ -3,3 +3,7 @@ venv/
 __pycache__/
 *.pyc
 .ipynb_checkpoints/
+lambda_ingest.zip
+src/lambda_ingest/requests/
+src/lambda_ingest/*.dist-info/
+src/lambda_ingest/*.egg-info/
