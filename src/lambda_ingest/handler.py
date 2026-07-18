@@ -6,6 +6,7 @@ from datetime import datetime, timezone
 
 RAW_BUCKET = os.environ["RAW_BUCKET"]
 API_KEY = os.environ["COINGECKO_API_KEY"]
+TRANSFORM_FUNCTION = os.environ["TRANSFORM_FUNCTION"]
 
 def fetch_market_data():
     url = "https://api.coingecko.com/api/v3/coins/markets"
@@ -21,6 +22,7 @@ def fetch_market_data():
     return resp.json()
 
 def lambda_handler(event, context):
+    # Fetch and write raw data
     data = fetch_market_data()
     now = datetime.now(timezone.utc)
     key = f"date={now:%Y-%m-%d}/markets_{now:%Y%m%dT%H%M%SZ}.json"
@@ -32,6 +34,14 @@ def lambda_handler(event, context):
         Body=json.dumps(data),
         ContentType="application/json",
     )
-    msg = f"Wrote {len(data)} records to s3://{RAW_BUCKET}/{key}"
-    print(msg)
-    return {"statusCode": 200, "body": msg}
+    print(f"Wrote {len(data)} records to s3://{RAW_BUCKET}/{key}")
+
+    # Trigger transform Lambda
+    lambda_client = boto3.client("lambda")
+    lambda_client.invoke(
+        FunctionName=TRANSFORM_FUNCTION,
+        InvocationType="Event",  # async — don't wait for it to finish
+    )
+    print(f"Triggered {TRANSFORM_FUNCTION}")
+
+    return {"statusCode": 200, "body": f"Ingested and triggered transform"}
